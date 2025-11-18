@@ -8,6 +8,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "esp_timer.h"
 
 static const char *TAG = "lab07";
 
@@ -45,7 +46,19 @@ void app_main(void)
 	game_init();
 	// TODO: Initialize sound
 
-	// TODO: Configure I/O pins for buttons
+	// Configure I/O pins for buttons
+	pin_reset(HW_BTN_A);
+	pin_input(HW_BTN_A, true);
+	pin_reset(HW_BTN_B);
+	pin_input(HW_BTN_B, true);
+	pin_reset(HW_BTN_MENU);
+	pin_input(HW_BTN_MENU, true);
+	pin_reset(HW_BTN_OPTION);
+	pin_input(HW_BTN_OPTION, true);
+	pin_reset(HW_BTN_SELECT);
+	pin_input(HW_BTN_SELECT, true);
+	pin_reset(HW_BTN_START);
+	pin_input(HW_BTN_START, true);
 
 	// Initialize update timer
 	update_timer = xTimerCreate(
