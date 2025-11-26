@@ -1,6 +1,8 @@
+#include <stdio.h>
 #include "lcd.h"
 #include "bird.h"
 #include "flappy_bird_bitmap.h"
+#include "cursor.h"
 
 enum bird_st_t
 {
@@ -9,18 +11,60 @@ enum bird_st_t
     collision_st,
 };
 
-void bird_init(bird_t *bird)
+static enum bird_st_t currentState;
+static coord_t x;
+static coord_t y;
+
+
+void bird_init(void)
 {
-    bird->sprite = (const color_t *)flappy_bird;
+    currentState = idle_st;
 }
 
-const color_t * bird_get_sprite(bird_t *bird)
+// let the bird start moving
+void bird_start(void)
 {
-    return bird->sprite;
+    currentState = moving_st;
 }
 
-// TODO: Create bird tick
-void bird_tick(bird_t *bird)
+coord_t bird_get_position(void)
 {
+    return y;
+}
 
+void bird_collision(void)
+{
+    currentState = collision_st;
+}
+
+// Main bird tick function
+void bird_tick(void)
+{
+    // Transistions
+    switch (currentState)
+    {
+        case idle_st:
+            break;
+        case moving_st:
+            break;
+        case collision_st:
+            break;
+    }
+
+    // Actions
+    switch (currentState)
+    {
+        case idle_st:
+            // draw bird on start screen
+            lcd_drawRGBBitmap(BIRD_X_POS, 75, flappy_bird, BIRD_SIZE, BIRD_SIZE);
+            break;
+        case moving_st:
+            cursor_get_pos(&x, &y); // get cursor position
+            if (y > 213)
+                y = 213;  
+            lcd_drawRGBBitmap(BIRD_X_POS, y, flappy_bird, BIRD_SIZE, BIRD_SIZE);
+            break;
+        case collision_st:
+            break;
+    }
 }

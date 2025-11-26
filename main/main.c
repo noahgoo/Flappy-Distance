@@ -4,6 +4,7 @@
 #include "pin.h"
 #include "lcd.h"
 #include "sound.h"
+#include "cursor.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -15,6 +16,16 @@ static const char *TAG = "lab07";
 // The update period as an integer in ms
 #define PER_MS ((uint32_t)(CONFIG_GAME_TIMER_PERIOD*1000))
 #define TIME_OUT 500 // ms
+
+#define CURSOR_SZ 7 // Cursor size (width & height) in pixels
+
+#define CHK_RET(x) ({                                           \
+        int32_t ret_val = (x);                                  \
+        if (ret_val != 0) {                                     \
+            ESP_LOGE(TAG, "FAIL: return %ld, %s", ret_val, #x); \
+        }                                                       \
+        ret_val;                                                \
+    })
 
 TimerHandle_t update_timer; // Declare timer handle for update callback
 
@@ -43,6 +54,7 @@ void app_main(void)
 	lcd_init();
 	lcd_frameEnable();
 	lcd_fillScreen(CONFIG_COLOR_BACKGROUND);
+	CHK_RET(cursor_init(PER_MS));
 	game_init();
 	// TODO: Initialize sound
 
@@ -79,6 +91,7 @@ void app_main(void)
 
 	// Main game loop
 	uint64_t t1, t2, tmax = 0; // For hardware timer values
+	coord_t x, y; // For cursor position
 	while (pin_get_level(HW_BTN_MENU)) // while MENU button not pressed
 	{
 		while (!interrupt_flag) ;
@@ -90,7 +103,15 @@ void app_main(void)
 		lcd_fillScreen(CONFIG_COLOR_BACKGROUND);
 #endif // CONFIG_ERASE
 		game_tick();
-
+		cursor_tick();
+		cursor_get_pos(&x, &y);
+#ifdef CONFIG_ERASE
+		static coord_t lx = -1, ly = -1;
+		if (x != lx || y != ly) {
+			cursor(lx,  ly, CONFIG_COLOR_BACKGROUND);
+			lx = x; ly = y;
+		}
+#endif // CONFIG_ERASE
 		lcd_writeFrame();
 		t2 = esp_timer_get_time() - t1;
 		if (t2 > tmax) tmax = t2;
