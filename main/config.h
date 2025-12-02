@@ -10,5 +10,6 @@
 // Colors
 #define CONFIG_COLOR_BACKGROUND rgb565(21, 200, 255)
 #define CONFIG_STATS_COLOR rgb565(0, 0, 0)
+#define CONFIG_GAME_OVER_COLOR rgb565(181, 36, 255)
 
 #endif

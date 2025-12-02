@@ -48,3 +48,13 @@
 
 11. **Optional extras**
     - Add sound effects, LED indicators, or other feedback when scoring or colliding.
+
+
+## Pin Setup
+
+Ultrasonic Sensor
+- Vcc pin goes to Pin 2 (second farthest right on ESP32)
+- Ground goes to Pin 3
+- Trigger goes to Pin 8 (IO17)
+- Echo goes to Pin 7 (IO16)
+   - Echo needs to have voltage divider (3k and 1k resistors)

@@ -16,6 +16,8 @@
 #define STATS_ARRAY_L 50
 #define STATS_X 0
 #define STATS_Y 0
+#define GAME_X 10
+#define GAME_Y 20
 
 // All pipes
 pipe_t pipes[NUM_OF_PIPES];
@@ -31,6 +33,20 @@ game_state_st currentState;
 // Scoring stats
 static int16_t pipes_passed;
 char stats[STATS_ARRAY_L];
+char game_over[10] = {"Game Over"};
+char restart[21] = {"Press 'A' to restart"};
+char start[19] = {"Press 'A' to start"};
+
+void game_end_screen(void)
+{
+    lcd_setFontSize(3);
+    lcd_drawString(GAME_X, GAME_Y, game_over, CONFIG_GAME_OVER_COLOR);
+    sprintf(stats, "Final Score: %d", pipes_passed);
+    lcd_drawString(GAME_X, GAME_Y + 50, stats, CONFIG_STATS_COLOR);
+    lcd_setFontSize(2);
+    lcd_drawString(GAME_X, GAME_Y + 100, restart, CONFIG_GAME_OVER_COLOR);
+    lcd_setFontSize(1);
+}
 
 void game_init(void)
 {
@@ -64,6 +80,9 @@ void game_tick(void)
                 bird_start();
                 for (uint8_t i = 0; i < NUM_OF_PIPES; i++)
                     pipe_start(&pipes[i]);
+            } else
+            {
+                lcd_drawString(GAME_X, GAME_Y, start, CONFIG_GAME_OVER_COLOR);
             }
             break;
         case playing_st:
@@ -109,8 +128,14 @@ void game_tick(void)
             lcd_drawString(STATS_X, STATS_Y, stats, CONFIG_STATS_COLOR);
             break;
         case game_over_st:
-            currentState = waiting_st;
-            game_init();
+            if (!pin_get_level(HW_BTN_A))
+            {
+                currentState = waiting_st;
+                game_init();
+            } else
+            {
+                game_end_screen();
+            }
             break;
     }
 }

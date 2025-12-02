@@ -78,7 +78,7 @@ void bird_tick(void)
             {
                 y = 213;
             }
-            printf("Y is %ld\n", y);
+            // printf("Y is %ld\n", y);
             lcd_drawRGBBitmap(BIRD_X_POS, y, flappy_bird, BIRD_SIZE, BIRD_SIZE);
             break;
         case collision_st:

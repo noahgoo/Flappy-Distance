@@ -8,8 +8,9 @@
 #define PIPE_WIDTH 30
 #define PIPE_GAP 70
 #define PIPE_SPACING (LCD_W + PIPE_WIDTH) / 3
-#define PIPE_SPEED 2
+#define PIPE_SPEED 3
 #define PIPE_COLOR 0x2C4A
+#define PIPE_BORDER_COLOR 0x21E1
 
 typedef struct {
     int32_t currentState; // State of pipes

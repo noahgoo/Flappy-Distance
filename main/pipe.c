@@ -57,8 +57,10 @@ void pipe_draw(pipe_t *pipe)
 {
     // draws top pipe
     lcd_fillRect2(pipe->x, 0, pipe->x + PIPE_WIDTH, pipe->gap_y - PIPE_GAP / 2, PIPE_COLOR);
+    lcd_drawRect2(pipe->x, 0, pipe->x + PIPE_WIDTH, pipe->gap_y - PIPE_GAP / 2, PIPE_BORDER_COLOR);
     // draws bottom pipe
     lcd_fillRect2(pipe->x, pipe->gap_y + PIPE_GAP / 2, pipe->x + PIPE_WIDTH, LCD_H, PIPE_COLOR);
+    lcd_drawRect2(pipe->x, pipe->gap_y + PIPE_GAP / 2, pipe->x + PIPE_WIDTH, LCD_H, PIPE_BORDER_COLOR);
 }
 
 void pipe_tick(pipe_t *pipe)
