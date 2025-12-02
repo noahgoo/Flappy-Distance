@@ -42,6 +42,16 @@ void pipe_player_scored(pipe_t *pipe)
     pipe->player_scored = true;
 }
 
+coord_t pipe_get_gap_y(pipe_t *pipe)
+{
+    return pipe->gap_y;
+}
+
+coord_t pipe_get_x(pipe_t *pipe)
+{
+    return pipe->x;
+}
+
 // draw pipe on screen
 void pipe_draw(pipe_t *pipe)
 {

@@ -3,6 +3,8 @@
 #include "bird.h"
 #include "flappy_bird_bitmap.h"
 #include "cursor.h"
+#include "ultrasensor.h"
+#include "config.h"
 
 enum bird_st_t
 {
@@ -12,8 +14,9 @@ enum bird_st_t
 };
 
 static enum bird_st_t currentState;
-static coord_t x;
+// static coord_t x;
 static coord_t y;
+static float smoothed_y = 0;
 
 
 void bird_init(void)
@@ -59,9 +62,23 @@ void bird_tick(void)
             lcd_drawRGBBitmap(BIRD_X_POS, 75, flappy_bird, BIRD_SIZE, BIRD_SIZE);
             break;
         case moving_st:
-            cursor_get_pos(&x, &y); // get cursor position
-            if (y > 213)
-                y = 213;  
+            // Use alpha filter to smooth out inputs
+            float raw_distance = ultrasensor_read_distance(TRIGGER_PIN, ECHO_PIN);
+            if (raw_distance >= 0)
+            {
+                smoothed_y = (ALPHA * raw_distance) + ((1 - ALPHA) * smoothed_y);
+            }
+
+            y = (coord_t)smoothed_y;
+            y *= Y_SCALER; // Scale y up
+            if (y < 0)  // Keep y in range
+            {
+                y = 0;
+            } else if (y > 213)
+            {
+                y = 213;
+            }
+            printf("Y is %ld\n", y);
             lcd_drawRGBBitmap(BIRD_X_POS, y, flappy_bird, BIRD_SIZE, BIRD_SIZE);
             break;
         case collision_st:

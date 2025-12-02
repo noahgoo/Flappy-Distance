@@ -5,6 +5,7 @@
 #include "lcd.h"
 #include "sound.h"
 #include "cursor.h"
+#include "ultrasensor.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -56,6 +57,7 @@ void app_main(void)
 	lcd_fillScreen(CONFIG_COLOR_BACKGROUND);
 	CHK_RET(cursor_init(PER_MS));
 	game_init();
+	ultrasensor_init((pin_num_t)TRIGGER_PIN, (pin_num_t)ECHO_PIN);
 	// TODO: Initialize sound
 
 	// Configure I/O pins for buttons

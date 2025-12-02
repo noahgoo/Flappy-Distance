@@ -76,15 +76,15 @@ void game_tick(void)
             coord_t bird_y = bird_get_position();
             for (uint8_t i = 0; i < NUM_OF_PIPES; i++)
             {
-                if ((pipes[i].x < BIRD_X_POS + BIRD_SIZE) && // Check the bird is on the same x level as the pipe
-                    (pipes[i].x + PIPE_WIDTH > BIRD_X_POS))
+                if ((pipes[i].x < BIRD_X_POS + BIRD_RIGHT ) && // Check the bird is on the same x level as the pipe
+                    (pipes[i].x + PIPE_WIDTH > BIRD_X_POS + BIRD_LEFT))
                 {
-                    if ((bird_y + BIRD_SIZE > pipes[i].gap_y + PIPE_GAP / 2) || // check if the bird is outside the gap
-                        (bird_y < pipes[i].gap_y - PIPE_GAP / 2))
+                    if ((bird_y + BIRD_BOTTOM > pipes[i].gap_y + PIPE_GAP / 2) || // check if the bird is outside the gap
+                        (bird_y + BIRD_TOP < pipes[i].gap_y - PIPE_GAP / 2))
                     {
                         bird_collision();
-                        printf("Collision when bird is at %ld\n", bird_y);
-                        printf("Pipe was at %ld\n", pipes[i].gap_y - PIPE_GAP / 2);
+                        // printf("Collision when bird is at %ld\n", bird_y);
+                        // printf("Pipe was at %ld\n", pipes[i].gap_y - PIPE_GAP / 2);
                         currentState = game_over_st;
                     }
                 }
