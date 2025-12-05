@@ -4,8 +4,8 @@
 #define CONFIG_GAME_TIMER_PERIOD 40.0E-3f
 
 // Pins
-#define ECHO_PIN 16
-#define TRIGGER_PIN 17
+#define ECHO_PIN 12
+#define TRIGGER_PIN 15
 
 // Colors
 #define CONFIG_COLOR_BACKGROUND rgb565(21, 200, 255)
